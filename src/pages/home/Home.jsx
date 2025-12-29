@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { usePublicClient } from "wagmi";
 import { formatEther } from "viem";
-import {CONTRACT_ADDRESS_MARKETPLACE, ABI_MARKETPLACE} from "../../contract/Marketplace";
+import {
+  CONTRACT_ADDRESS_MARKETPLACE,
+  ABI_MARKETPLACE,
+} from "../../contract/Marketplace";
 import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../contract/NFT";
 
 export default function Home() {
@@ -51,7 +54,7 @@ export default function Home() {
         args: [item[2]], // item[2] itu merupakan tokenId
       });
 
-      const metadataURL = resolveIPFS(uri)
+      const metadataURL = resolveIPFS(uri);
 
       // Fetch Metadata
       const response = await fetch(metadataURL);
@@ -82,11 +85,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMarketplaceItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if(isLoading) return <h1 className="animate-pulse">Loading...</h1>;
+  if (isLoading) return <h1 className="animate-pulse">Loading...</h1>;
 
   return (
     <>
@@ -98,11 +101,10 @@ export default function Home() {
               <div
                 className="relative size-full h-80 bg-cover object-cover bg-center flex flex-col justify-end items-center border border-gray-300 rounded-md rounded-b-none"
                 style={{
-                  backgroundImage:
-                    `url(${item.image})`,
+                  backgroundImage: `url(${item.image})`,
                 }}
               >
-                <div className="w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent text-center">
+                <div className="w-full bg-linear-to-t from-black/80 via-black/40 to-transparent text-center">
                   {/* title */}
                   <h3 className="text-xl text-gray-200 font-semibold drop-shadow-lg">
                     {item.name}
@@ -116,7 +118,7 @@ export default function Home() {
               {/* button buy */}
               <div className="flex justify-center items-center">
                 <button className="w-full bg-gray-500 p-3 text-gray-200 font-bold cursor-pointer hover:text-gray-300 hover:bg-gray-600">
-                  Buy For {formatEther(item.totalPrice)} ETH
+                  {formatEther(item.totalPrice)} ETH
                 </button>
               </div>
             </div>
