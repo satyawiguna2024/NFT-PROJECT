@@ -21,7 +21,6 @@ export default function Purchases() {
       : uri;
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadMyPurchase = async () => {
     if (!address) {
       setIsLoading(false);
@@ -110,7 +109,8 @@ export default function Purchases() {
 
   useEffect(() => {
     loadMyPurchase();
-  }, [address, loadMyPurchase]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
 
   console.log("Data purchases: ", purchases);
 
