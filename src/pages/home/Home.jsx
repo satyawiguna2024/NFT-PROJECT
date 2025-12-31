@@ -21,6 +21,7 @@ export default function Home() {
       : uri;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadMarketplaceItems = async () => {
     setIsLoading(true);
 
@@ -56,7 +57,7 @@ export default function Home() {
 
       const metadataURL = resolveIPFS(uri);
 
-      // Fetch Metadata
+      // Fetch Metadata ???
       const response = await fetch(metadataURL);
       const metadata = await response.json();
 
@@ -86,8 +87,7 @@ export default function Home() {
 
   useEffect(() => {
     loadMarketplaceItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadMarketplaceItems]);
 
   if (isLoading) return <h1 className="animate-pulse">Loading...</h1>;
 
