@@ -79,7 +79,7 @@ export default function Home() {
 
         {/* Exlusive bundle NFT */}
         <section className="relative z-10 container-costume pt-28 px-3">
-          <h1 className="text-xl text-shadow-md font-semibold font-montserrat text-white text-center md:text-start">
+          <h1 className="text-xl sm:text-2xl md:text-3xl text-shadow-md font-semibold font-montserrat text-white text-center md:text-start">
             Exlusive Bundle{" "}
             <span className="text-yellow-400 underline underline-offset-2">
               NFTs

@@ -17,9 +17,9 @@ export const exlusiveNft = [
   {id: 4, imageNFT: NftImage7, numberNFT: 12, price: "0.66"},
   {id: 5, imageNFT: NftImage8, numberNFT: 33, price: "0.33"},
   {id: 6, imageNFT: NftImage9, numberNFT: 100, price: "0.03"},
-  {id: 7, imageNFT: NftImage10, numberNFT: 122, price: "0.7"},
-  {id: 8, imageNFT: NftImage11, numberNFT: 155, price: "0.8"},
+  {id: 7, imageNFT: NftImage10, numberNFT: 122, price: "0.07"},
+  {id: 8, imageNFT: NftImage11, numberNFT: 155, price: "0.08"},
   {id: 9, imageNFT: NftImage12, numberNFT: 189, price: "0.88"},
   {id: 10, imageNFT: NftImage13, numberNFT: 111, price: "0.10"},
-  {id: 11, imageNFT: NftImage14, numberNFT: 212, price: "0.9"}
+  {id: 11, imageNFT: NftImage14, numberNFT: 212, price: "0.09"}
 ]
