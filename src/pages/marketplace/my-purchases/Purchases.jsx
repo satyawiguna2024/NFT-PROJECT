@@ -3,8 +3,8 @@ import { usePublicClient, useAccount } from "wagmi";
 import {
   CONTRACT_ADDRESS_MARKETPLACE,
   ABI_MARKETPLACE,
-} from "../../contract/Marketplace";
-import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../contract/NFT";
+} from "../../../contract/Marketplace";
+import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../../contract/NFT";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);

@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { uploadImageToIPFS, uploadMetadataToIPFS } from "../../utils/pinata";
+import { uploadImageToIPFS, uploadMetadataToIPFS } from "../../../utils/pinata";
 import { useWriteContract } from "wagmi";
 import { parseEther } from "viem";
-import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../contract/NFT";
-import { CONTRACT_ADDRESS_MARKETPLACE, ABI_MARKETPLACE } from "../../contract/Marketplace";
+import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../../contract/NFT";
+import { CONTRACT_ADDRESS_MARKETPLACE, ABI_MARKETPLACE } from "../../../contract/Marketplace";
 
 export default function Create() {
   const [image, setImage] = useState(null);

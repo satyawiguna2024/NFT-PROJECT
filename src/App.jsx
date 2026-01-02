@@ -1,21 +1,24 @@
 import { Routes, Route } from "react-router";
-import {Home, Create, ListedItems, Purchases} from "./pages/index";
-import Navbar from "./components/Navbar";
+import {Home, Marketplace} from "./pages/index";
+import ProtectedRoute from "./components/ProtectedRoute";
+import HomeLayout from "./layouts/HomeLayout";
+import MarketplaceLayout from "./layouts/MarketplaceLayout";
 
 export default function App() {
-  return(
+  return (
     <>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/my-listed-items" element={<ListedItems />} />
-            <Route path="/my-purchases" element={<Purchases />} />
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        {/* Home Layout */}
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+
+        <Route element={<MarketplaceLayout />}>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/marketplace" element={<Marketplace />} />
+          </Route>
+        </Route>
+      </Routes>
     </>
   );
 }

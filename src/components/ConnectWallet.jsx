@@ -28,7 +28,7 @@ export default function ConnectWallet() {
                 key={connector.id}
                 onClick={() => connect({ connector })}
                 disabled={isPending}
-                className={`px-3 py-2 rounded-md border border-gray-100 text-gray-100 hover:bg-gray-500
+                className={`px-3 py-2 rounded-md border border-gray-100 text-gray-100 hover:bg-white/40
                       ${
                         isPending
                           ? "cursor-not-allowed bg-gray-500 animate-spin"
