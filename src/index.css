@@ -15,3 +15,20 @@ body {
 .container-costume {
   @apply w-full max-w-300 mx-auto
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  gap: 12px;
+  animation: marquee 20s linear infinite;
+}
+

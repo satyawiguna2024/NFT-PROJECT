@@ -1,6 +1,7 @@
 import { Navigate } from "react-router";
 import { useAccount } from "wagmi";
 import { exlusiveNft } from "./ListMappingNFT";
+import ConnectMetamask from "./ConnectMetamask";
 import NftImageFirst from "../../assets/image-nft/nft1.jpeg";
 import NftImageSecond from "../../assets/image-nft/nft2.jpeg";
 import NftImageThree from "../../assets/image-nft/nft4.jpeg";
@@ -18,9 +19,9 @@ export default function Home() {
       {/* Header Content */}
       <div className="relative overflow-hidden">
         {/* === BACKGROUND GLOW === */}
-        <div className="absolute -top-40 -left-40 size-100 bg-purple-600/50 rounded-full blur-[120px]" />
-        <div className="absolute top-20 right-0 size-87.5 bg-fuchsia-500/40 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-1/3 size-112.5 bg-blue-500/30 rounded-full blur-[140px]" />
+        <div className="absolute -top-40 -left-40 size-100 bg-purple-600/50 rounded-full blur-[120px] hidden md:block" />
+        <div className="absolute top-20 right-0 size-87.5 bg-fuchsia-500/40 rounded-full blur-[120px] hidden md:block" />
+        <div className="absolute bottom-0 left-1/3 size-112.5 bg-blue-500/30 rounded-full blur-[140px] hidden md:block" />
         <div className="absolute -top-20 left-0 size-75 bg-yellow-400/20 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-20 size-100 bg-purple-500/30 rounded-full blur-[140px]" />
 
@@ -41,9 +42,7 @@ export default function Home() {
 
               {/* button */}
               <div className="flex justify-center md:justify-start">
-                <button className="px-3 py-2 xl:py-3 border font-poppins mt-5 rounded-md bg-gray-100 hover:bg-gray-100/80 cursor-pointer text-gray-800 font-medium drop-shadow-md">
-                  Connect Wallet & Explore
-                </button>
+                <ConnectMetamask />
               </div>
             </div>
             <div className="flex-1 p-3 hidden md:block">
@@ -87,29 +86,31 @@ export default function Home() {
           </h1>
 
           {/* image */}
-          <div className="flex items-center gap-3 overflow-x-auto my-10">
-            {exlusiveNft.map((item, i) => (
-              <div key={i} className="shrink-0 w-56 relative">
-                <div
-                  style={{ backgroundImage: `url(${item.imageNFT})` }}
-                  className="relative w-full h-80 bg-cover bg-center rounded-xl overflow-hidden"
-                >
-                  {/* OVERLAY GRADIENT */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="overflow-hidden pt-10">
+            <div className="marquee">
+              {[...exlusiveNft, ...exlusiveNft].map((item, i) => (
+                <div key={i} className="shrink-0 w-56 relative">
+                  <div
+                    style={{ backgroundImage: `url(${item.imageNFT})` }}
+                    className="relative w-full h-80 bg-cover bg-center rounded-xl overflow-hidden"
+                  >
+                    {/* OVERLAY GRADIENT */}
+                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
-                  {/* NFT NUMBER */}
-                  <h5 className="absolute top-2 left-2 text-lg text-gray-100/90 font-semibold drop-shadow-md">
-                    #{item.numberNFT}
-                  </h5>
+                    {/* NFT NUMBER */}
+                    <h5 className="absolute top-2 left-2 text-lg text-gray-100/90 font-semibold drop-shadow-md">
+                      #{item.numberNFT}
+                    </h5>
 
-                  {/* PRICE */}
-                  <div className="absolute bottom-2 left-2 flex items-center gap-x-1 text-white drop-shadow-md">
-                    <FaEthereum size={20} />
-                    <h5 className="font-semibold text-white">{item.price}</h5>
+                    {/* PRICE */}
+                    <div className="absolute bottom-2 left-2 flex items-center gap-x-1 text-white drop-shadow-md">
+                      <FaEthereum size={20} />
+                      <h5 className="font-semibold text-white">{item.price}</h5>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
       </div>
