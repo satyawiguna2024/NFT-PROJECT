@@ -28,14 +28,17 @@ export default function ConnectWallet() {
                 key={connector.id}
                 onClick={() => connect({ connector })}
                 disabled={isPending}
-                className={`px-3 py-2 rounded-md border border-gray-100 text-gray-100 hover:bg-white/40
-                      ${
-                        isPending
-                          ? "cursor-not-allowed bg-gray-500 animate-spin"
-                          : "cursor-pointer"
-                      }`}
+                className={`flex items-center gap-x-2 px-3 py-2 rounded-md border border-gray-100 text-gray-100 font-poppins font-medium
+                      ${isPending ? "cursor-not-allowed" : "cursor-pointer hover:bg-white/40"}`}
               >
-                {isPending ? <LuLoaderCircle /> : `Connect ${connector.name}`}
+                {isPending ? (
+                  <>
+                    <LuLoaderCircle size={25} className="animate-spin" />
+                    Connecting MetaMask
+                  </>
+                ) : (
+                  `Connect ${connector.name}`
+                )}
               </button>
             ))}
         </>
@@ -48,7 +51,11 @@ export default function ConnectWallet() {
             >
               <h5 className="text-gray-100">{shortenAddress(address)}</h5>
               <p className="text-gray-300 text-sm">
-                {dataBalance ? Number(formatUnits(dataBalance.value, dataBalance.decimals)).toFixed(4) : "0.0000"}{" "}
+                {dataBalance
+                  ? Number(
+                      formatUnits(dataBalance.value, dataBalance.decimals)
+                    ).toFixed(4)
+                  : "0.0000"}{" "}
                 {dataBalance?.symbol}
               </p>
             </div>
