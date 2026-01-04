@@ -2,6 +2,7 @@ import { useAccount, useConnect, useDisconnect, useBalance } from "wagmi";
 import { useState } from "react";
 import { formatUnits } from "viem";
 import { LuLoaderCircle } from "react-icons/lu";
+import { FaWallet } from "react-icons/fa";
 
 export default function ConnectWallet() {
   const [btnClick, setBtnClick] = useState(false);
@@ -44,20 +45,23 @@ export default function ConnectWallet() {
         </>
       ) : (
         <>
-          <div className="px-3 py-2 w-40 bg-gray-500 rounded-md border border-gray-100">
+          <div className="px-3 py-2 rounded-md border border-gray-100">
             <div
               onClick={() => setBtnClick(!btnClick)}
-              className="cursor-pointer"
+              className="cursor-pointer flex items-center gap-x-3"
             >
-              <h5 className="text-gray-100">{shortenAddress(address)}</h5>
-              <p className="text-gray-300 text-sm">
-                {dataBalance
-                  ? Number(
-                      formatUnits(dataBalance.value, dataBalance.decimals)
-                    ).toFixed(4)
-                  : "0.0000"}{" "}
-                {dataBalance?.symbol}
-              </p>
+              <FaWallet size={28} className="text-white" />
+              <div>
+                <h5 className="text-gray-100">{shortenAddress(address)}</h5>
+                <p className="text-gray-300 text-sm">
+                  {dataBalance
+                    ? Number(
+                        formatUnits(dataBalance.value, dataBalance.decimals)
+                      ).toFixed(4)
+                    : "0.0000"}{" "}
+                  {dataBalance?.symbol}
+                </p>
+              </div>
             </div>
 
             {/* Menu btn disconnect wallet */}
