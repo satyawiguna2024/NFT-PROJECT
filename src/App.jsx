@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router";
-import {Home, Marketplace} from "./pages/index";
+import {Create, Home, ListedItems, Marketplace, Purchases} from "./pages/index";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomeLayout from "./layouts/HomeLayout";
 import MarketplaceLayout from "./layouts/MarketplaceLayout";
@@ -16,6 +16,9 @@ export default function App() {
         <Route element={<MarketplaceLayout />}>
           <Route element={<ProtectedRoute />}>
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/marketplace/create-nft" element={<Create />} />
+            <Route path="/marketplace/mylisted-items" element={<ListedItems />} />
+            <Route path="/marketplace/my-purchases" element={<Purchases />} />
           </Route>
         </Route>
       </Routes>
