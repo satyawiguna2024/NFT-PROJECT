@@ -84,7 +84,7 @@ export default function Create() {
 
   return (
     <>
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto bg-white">
         <h1 className="text-3xl font-semibold text-gray-800 mt-8">Create NFTS</h1>
 
         {/* form input */}

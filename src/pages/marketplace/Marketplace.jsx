@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  usePublicClient,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { formatEther } from "viem";
 import {
   CONTRACT_ADDRESS_MARKETPLACE,
@@ -12,11 +17,14 @@ export default function Marketplace() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const {address} = useAccount();
-  const avatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${address}`;
+  const { address } = useAccount();
   const publicClient = usePublicClient(); // readContract smart-contract
-  const {writeContract, data, isPending} = useWriteContract();
-  const {isLoading: isConfirmingBtn, isSuccess, isError} = useWaitForTransactionReceipt({hash: data});
+  const { writeContract, data, isPending } = useWriteContract();
+  const {
+    isLoading: isConfirmingBtn,
+    isSuccess,
+    isError,
+  } = useWaitForTransactionReceipt({ hash: data });
 
   // Convert IPFS -> HTTP Gateway
   const resolveIPFS = (uri) => {
@@ -92,13 +100,13 @@ export default function Marketplace() {
   useEffect(() => {
     loadMarketplaceItems();
 
-    if(isSuccess) alert("✅ Purchase is successfully!");
+    if (isSuccess) alert("✅ Purchase is successfully!");
 
-    if(isError) {
+    if (isError) {
       alert("Purchase item failed!");
       console.error("Purchase item failed!", isError);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const purchaseItem = (item) => {
@@ -107,9 +115,9 @@ export default function Marketplace() {
       abi: ABI_MARKETPLACE,
       functionName: "purchaseItem",
       args: [item.itemId],
-      value: item.totalPrice
-    })
-  }
+      value: item.totalPrice,
+    });
+  };
 
   if (isLoading) return <h1 className="animate-pulse">Loading...</h1>;
 
@@ -129,70 +137,84 @@ export default function Marketplace() {
 
         {/* card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {items.map((itm, i) => (
-            <div
-              key={i}
-              className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto"
-            >
-              <div className="flex items-center gap-x-2">
-                <div
-                  style={{ backgroundImage: `url(${avatarUrl})` }}
-                  className="size-12 rounded-full p-5 bg-cover bg-center object-cover border border-gray-300 bg-white"
-                />
-                <div>
-                  <p className="font-poppins text-gray-200/70 font-medium">
-                    Creator
-                  </p>
-                  <h4 className="font-poppins text-gray-200 font-medium">
-                    {address.slice(0, 15)}...{address.slice(-4)}
-                  </h4>
-                </div>
-              </div>
+          {items.map((itm, i) => {
+            const isOwner =
+              address &&
+              itm.seller &&
+              address.toLowerCase() === itm.seller.toLowerCase();
 
-              {/* image nft */}
-              <div className="relative">
-                <img
-                  src={itm.image}
-                  alt="NFTs"
-                  className="w-full h-64 bg-cover bg-center p-2 object-cover rounded-3xl"
-                />
-
-                <h5 className="absolute bottom-4 left-20 z-10 px-3 rounded-full font-poppins text-green-400 bg-black/60 backdrop-blur-md border border-green-400/40 shadow-[0_0_15px_rgba(34,197,94,0.6)]">
-                  Available
-                </h5>
-              </div>
-
-              {/* title */}
-              <div className="mx-2">
-                <h3 className="font-poppins text-gray-200 font-semibold text-lg">
-                  {itm.name}
-                </h3>
-
-                <div className="flex items-end justify-between mt-3">
-                  <div className="leading-tight">
-                    <p className="text-xs text-gray-400 font-medium">Price</p>
-                    <p className="text-gray-200 font-semibold text-lg">
-                      {formatEther(itm.totalPrice)} ETH
+            return (
+              <div
+                key={i}
+                className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto"
+              >
+                <div className="flex items-center gap-x-2">
+                  <div
+                    style={{
+                      backgroundImage: `url('https://api.dicebear.com/7.x/identicon/svg?seed=${itm.seller}')`,
+                    }}
+                    className="size-12 rounded-full p-5 bg-cover bg-center object-cover border border-gray-300 bg-white"
+                  />
+                  <div>
+                    <p className="font-poppins text-gray-200/70 font-medium">
+                      Creator
                     </p>
+                    <h4 className="font-poppins text-gray-200 font-medium">
+                      {itm.seller.slice(0, 15)}...{itm.seller.slice(-4)}
+                    </h4>
                   </div>
+                </div>
 
-                  <button
-                    disabled={isPending || isConfirmingBtn}
-                    onClick={() => purchaseItem(itm)}
-                    className={`flex items-center gap-x-1 px-4 py-1.5 bg-blue-500 font-poppins font-medium text-white rounded-2xl whitespace-nowrap ${isPending || isConfirmingBtn ? "cursor-not-allowed bg-gray-400" : "hover:bg-blue-500/80 cursor-pointer"}`}>
-                    {isPending || isConfirmingBtn ? 
-                      (
-                      <>
-                        <LuLoader size={25} className="animate-spin" />
-                        <p>Process</p>
-                      </>
-                      ) : "Buy NFT"
-                    }
-                  </button>
+                {/* image nft */}
+                <div className="relative">
+                  <img
+                    src={itm.image}
+                    alt="NFTs"
+                    className="w-full h-64 bg-cover bg-center p-2 object-cover rounded-3xl"
+                  />
+
+                  <h5 className="absolute bottom-4 left-20 z-10 px-3 rounded-full font-poppins text-green-400 bg-black/60 backdrop-blur-md border border-green-400/40 shadow-[0_0_15px_rgba(34,197,94,0.6)]">
+                    Available
+                  </h5>
+                </div>
+
+                {/* title */}
+                <div className="mx-2">
+                  <h3 className="font-poppins text-gray-200 font-semibold text-lg">
+                    "{itm.name}"
+                  </h3>
+
+                  <div className="flex items-end justify-between mt-3">
+                    <div className="leading-tight">
+                      <p className="text-xs text-gray-400 font-medium">Price</p>
+                      <p className="text-gray-200 font-semibold text-lg">
+                        {formatEther(itm.totalPrice)} ETH
+                      </p>
+                    </div>
+
+                    <button
+                      disabled={isPending || isConfirmingBtn || isOwner}
+                      onClick={() => purchaseItem(itm)}
+                      className={`flex items-center gap-x-1 px-4 py-1.5 bg-blue-500 font-poppins font-medium text-white rounded-2xl whitespace-nowrap ${
+                        isPending || isConfirmingBtn || isOwner
+                          ? "cursor-not-allowed bg-gray-400"
+                          : "hover:bg-blue-500/80 cursor-pointer"
+                      }`}
+                    >
+                      {isPending || isConfirmingBtn ? (
+                        <>
+                          <LuLoader size={25} className="animate-spin" />
+                          <p>Process</p>
+                        </>
+                      ) : (
+                        "Buy NFT"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </>
