@@ -6,7 +6,7 @@ export default function MarketplaceLayout() {
     <>
       <div className="flex flex-col min-h-screen">
         <MarketplaceNavbar />
-        <main className="flex-1">
+        <main className="flex-1 sm:mt-20">
           <Outlet />
         </main>
       </div>

@@ -8,8 +8,8 @@ import { useState } from "react";
 const menuNavbar = [
   { id: 1, path: "/marketplace", title: "Marketplace" },
   { id: 2, path: "/marketplace/create-nft", title: "Create" },
-  { id: 2, path: "/marketplace/mylisted-items", title: "My Listed Items" },
-  { id: 3, path: "/marketplace/mypurchases", title: "My Purchases" },
+  { id: 3, path: "/marketplace/mylisted-items", title: "My Listed Items" },
+  { id: 4, path: "/marketplace/my-purchases", title: "My Purchases" },
 ];
 
 export default function MarketplaceNavbar() {
@@ -56,7 +56,7 @@ export default function MarketplaceNavbar() {
 
       <nav>
         <ul
-          className={`flex flex-col sm:flex-row gap-5 sm:gap-9 w-full p-6 fixed bg-gray-900 transition-transform sm:translate-x-0 ${
+          className={`absolute z-50 flex flex-col sm:flex-row gap-5 sm:gap-9 w-full p-6 bg-gray-700 transition-transform sm:translate-x-0 ${
             navIsOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -64,6 +64,7 @@ export default function MarketplaceNavbar() {
             <div key={list.id}>
               <li className="font-poppins text-lg font-medium">
                 <NavLink
+                  end
                   to={list.path}
                   className={({ isActive }) =>
                     `${
@@ -86,31 +87,3 @@ export default function MarketplaceNavbar() {
     </>
   );
 }
-
-// <nav className="w-full p-3 bg-gray-400 flex items-center justify-around">
-//   {/* title */}
-//   <h1>
-//     <Link to="/" className="text-2xl text-gray-100 font-semibold">🃏 DApp NFT Marketplace</Link>
-//   </h1>
-
-//   {/* menu-list */}
-//   <ul className="flex items-center gap-x-12">
-//     <li>
-//       <NavLink to="/" className={({isActive}) => `${isActive ? "underline text-gray-200" : "text-gray-100 hover:text-gray-200 underline-offset-4 hover:underline"}`}>Home</NavLink>
-//     </li>
-//     <li>
-//       <NavLink to="/create" className={({isActive}) => `${isActive ? "underline text-gray-200" : "text-gray-100 hover:text-gray-200 underline-offset-4 hover:underline"}`}>Create</NavLink>
-//     </li>
-//     <li>
-//       <NavLink to="/my-listed-items" className={({isActive}) => `${isActive ? "underline text-gray-200" : "text-gray-100 hover:text-gray-200 underline-offset-4 hover:underline"}`}>My Listed Items</NavLink>
-//     </li>
-//     <li>
-//       <NavLink to="/my-purchases" className={({isActive}) => `${isActive ? "underline text-gray-200" : "text-gray-100 hover:text-gray-200 underline-offset-4 hover:underline"}`}>My Purchases</NavLink>
-//     </li>
-//   </ul>
-
-//   {/* wallet connectors */}
-//   <div>
-//     <ConnectWallet />
-//   </div>
-// </nav>

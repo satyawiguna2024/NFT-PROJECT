@@ -1,5 +1,5 @@
 import { useConnect } from "wagmi";
-import { LuLoaderCircle } from "react-icons/lu";
+import { LuLoader } from "react-icons/lu";
 
 export default function ConnectMetamask() {
   const { connectors, connect, isPending } = useConnect();
@@ -17,7 +17,7 @@ export default function ConnectMetamask() {
           >
             {isPending ? (
               <>
-                <LuLoaderCircle size={25} className="animate-spin" />
+                <LuLoader size={25} className="animate-spin" />
                 Connecting MetaMask
               </>
             ) : (
