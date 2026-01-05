@@ -16,6 +16,7 @@ import { LuLoader } from "react-icons/lu";
 export default function Marketplace() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [processingItemId, setProcessingItemId] = useState(null);
 
   const { address } = useAccount();
   const publicClient = usePublicClient(); // readContract smart-contract
@@ -110,16 +111,23 @@ export default function Marketplace() {
   }, []);
 
   const purchaseItem = (item) => {
-    writeContract({
-      address: CONTRACT_ADDRESS_MARKETPLACE,
-      abi: ABI_MARKETPLACE,
-      functionName: "purchaseItem",
-      args: [item.itemId],
-      value: item.totalPrice,
-    });
+    try {
+      setProcessingItemId(item.itemId);
+
+      writeContract({
+        address: CONTRACT_ADDRESS_MARKETPLACE,
+        abi: ABI_MARKETPLACE,
+        functionName: "purchaseItem",
+        args: [item.itemId],
+        value: item.totalPrice,
+      });
+    } catch(err) {
+      console.log("Error in purchase item: ", err.message);
+      setProcessingItemId(null);
+    }
   };
 
-  if (isLoading) return <h1 className="animate-pulse">Loading...</h1>;
+  if (isLoading) return <h1 className="animate-pulse text-white">Loading...</h1>;
 
   return (
     <>
@@ -138,10 +146,8 @@ export default function Marketplace() {
         {/* card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
           {items.map((itm, i) => {
-            const isOwner =
-              address &&
-              itm.seller &&
-              address.toLowerCase() === itm.seller.toLowerCase();
+            const isOwner = address && itm.seller && address.toLowerCase() === itm.seller.toLowerCase();
+            const isThisItemProcessing = processingItemId === itm.itemId && (isPending || isConfirmingBtn);
 
             return (
               <div
@@ -193,15 +199,15 @@ export default function Marketplace() {
                     </div>
 
                     <button
-                      disabled={isPending || isConfirmingBtn || isOwner}
+                      disabled={isThisItemProcessing || isOwner}
                       onClick={() => purchaseItem(itm)}
                       className={`flex items-center gap-x-1 px-4 py-1.5 bg-blue-500 font-poppins font-medium text-white rounded-2xl whitespace-nowrap ${
-                        isPending || isConfirmingBtn || isOwner
+                        isThisItemProcessing || isOwner
                           ? "cursor-not-allowed bg-gray-400"
                           : "hover:bg-blue-500/80 cursor-pointer"
                       }`}
                     >
-                      {isPending || isConfirmingBtn ? (
+                      {isThisItemProcessing ? (
                         <>
                           <LuLoader size={25} className="animate-spin" />
                           <p>Process</p>
