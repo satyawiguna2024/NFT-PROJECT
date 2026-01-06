@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import MarketplaceNavbar from "../components/MarketplaceNavbar";
+import Footer from "../components/Footer";
 
 export default function MarketplaceLayout() {
   return (
@@ -9,6 +10,7 @@ export default function MarketplaceLayout() {
         <main className="flex-1 sm:mt-20">
           <Outlet />
         </main>
+        <Footer />
       </div>
     </>
   )
