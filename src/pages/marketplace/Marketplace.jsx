@@ -17,6 +17,7 @@ export default function Marketplace() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingItemId, setProcessingItemId] = useState(null);
+  const [sortOrder, setSortOrder] = useState("high");
 
   const { address } = useAccount();
   const publicClient = usePublicClient(); // readContract smart-contract
@@ -98,18 +99,6 @@ export default function Marketplace() {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    loadMarketplaceItems();
-
-    if (isSuccess) alert("✅ Purchase is successfully!");
-
-    if (isError) {
-      alert("Purchase item failed!");
-      console.error("Purchase item failed!", isError);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const purchaseItem = (item) => {
     try {
       setProcessingItemId(item.itemId);
@@ -121,11 +110,37 @@ export default function Marketplace() {
         args: [item.itemId],
         value: item.totalPrice,
       });
+
     } catch(err) {
       console.log("Error in purchase item: ", err.message);
       setProcessingItemId(null);
     }
   };
+
+  useEffect(() => {
+    loadMarketplaceItems();
+
+    if (isSuccess) {
+      alert("✅ Purchase NFT successfully!");
+    }
+
+    if (isError) {
+      alert("Purchase item failed!");
+      console.error("Purchase item failed!", isError);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, isError]);
+
+  // filter price
+  const sortedItems = [...items].sort((a,b) => {
+    if(sortOrder === "high") {
+      return a.totalPrice > b.totalPrice ? -1 : 1
+    }
+
+    if(sortOrder === "low") {
+      return a.totalPrice < b.totalPrice ? -1 : 1
+    }
+  })
 
   if (isLoading) return <h1 className="animate-pulse text-white">Loading...</h1>;
 
@@ -137,15 +152,15 @@ export default function Marketplace() {
             {items.length} Items
           </h1>
 
-          <select className="border border-gray-200 text-gray-200 p-1 rounded-md">
-            <option value="">High to Low</option>
-            <option value="">Low to High</option>
+          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="border border-gray-200 text-gray-200 p-1 rounded-md">
+            <option value="high">High to Low</option>
+            <option value="low">Low to High</option>
           </select>
         </div>
 
         {/* card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {items.map((itm, i) => {
+          {sortedItems.map((itm, i) => {
             const isOwner = address && itm.seller && address.toLowerCase() === itm.seller.toLowerCase();
             const isThisItemProcessing = processingItemId === itm.itemId && (isPending || isConfirmingBtn);
 

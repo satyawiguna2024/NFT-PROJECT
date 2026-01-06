@@ -9,6 +9,7 @@ import { formatEther } from "viem";
 
 export default function ListedItems() {
   const [listItems, setListItems] = useState([]);
+  const [sortOrder, setSortOrder] = useState("high");
   const [isLoading, setIsLoading] = useState(true);
 
   const publicClient = usePublicClient();
@@ -97,6 +98,17 @@ export default function ListedItems() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // filter price
+  const sortedItems = [...listItems].sort((a,b) => {
+    if(sortOrder === "high") {
+      return a.totalPrice > b.totalPrice ? -1 : 1
+    }
+
+    if(sortOrder === "low") {
+      return a.totalPrice < b.totalPrice ? -1 : 1
+    }
+  })
+
   if (isLoading) return <span className="animate-pulse text-white">Loading...</span>;
 
   return (
@@ -107,15 +119,15 @@ export default function ListedItems() {
             {listItems.length} Items
           </h1>
 
-          <select className="border border-gray-200 text-gray-200 p-1 rounded-md">
-            <option value="">High to Low</option>
-            <option value="">Low to High</option>
+          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="border border-gray-200 text-gray-200 p-1 rounded-md">
+            <option value="high">High to Low</option>
+            <option value="low">Low to High</option>
           </select>
         </div>
 
         {/* card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {listItems.map((itm, i) => (
+          {sortedItems.map((itm, i) => (
               <div
                 key={i}
                 className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto"
