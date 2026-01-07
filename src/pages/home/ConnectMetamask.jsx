@@ -7,7 +7,7 @@ export default function ConnectMetamask() {
   return (
     <>
       {connectors
-        .filter((conn) => conn.name === "MetaMask")
+        .filter((conn) => conn.name.toLowerCase().includes || conn.name === "Injected" )
         .map((conn) => (
           <button
             key={conn.id}
