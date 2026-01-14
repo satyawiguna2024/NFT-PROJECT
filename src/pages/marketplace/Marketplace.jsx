@@ -1,148 +1,13 @@
-import { useEffect, useState } from "react";
-import {
-  useAccount,
-  usePublicClient,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import {useAccount} from "wagmi";
 import { formatEther } from "viem";
-import {
-  CONTRACT_ADDRESS_MARKETPLACE,
-  ABI_MARKETPLACE,
-} from "../../contract/Marketplace";
-import { CONTRACT_ADDRESS_NFT, ABI_NFT } from "../../contract/NFT";
 import { LuLoader } from "react-icons/lu";
+import { useMarketplaceItem } from "../../hooks/useMarketplaceItems";
 
 export default function Marketplace() {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [processingItemId, setProcessingItemId] = useState(null);
-  const [sortOrder, setSortOrder] = useState("high");
-
+  const {items, loading, processingItemId, sortOrder, setSortOrder, purchaseItem, isProcessing} = useMarketplaceItem();
   const { address } = useAccount();
-  const publicClient = usePublicClient(); // readContract smart-contract
-  const { writeContract, data, isPending } = useWriteContract();
-  const {
-    isLoading: isConfirmingBtn,
-    isSuccess,
-    isError,
-  } = useWaitForTransactionReceipt({ hash: data });
 
-  // Convert IPFS -> HTTP Gateway
-  const resolveIPFS = (uri) => {
-    if (!uri) return "";
-    return uri.startsWith("ipfs://")
-      ? uri.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/")
-      : uri;
-  };
-
-  const loadMarketplaceItems = async () => {
-    setIsLoading(true);
-
-    // 1. Ambil itemCount
-    const itemCount = await publicClient.readContract({
-      address: CONTRACT_ADDRESS_MARKETPLACE,
-      abi: ABI_MARKETPLACE,
-      functionName: "itemCount",
-    });
-
-    const itemData = [];
-
-    // 2. Loop untuk setiap item[]
-    for (let i = 1; i <= Number(itemCount); i++) {
-      // Ambil data item
-      const item = await publicClient.readContract({
-        address: CONTRACT_ADDRESS_MARKETPLACE,
-        abi: ABI_MARKETPLACE,
-        functionName: "items",
-        args: [i],
-      });
-
-      // Skip jika sudah sold
-      if (item[5]) continue; // ini ambil dari variable struct, dimulai dari atas 0 seperti array: item[5] = sold
-
-      // Ambil tokenURI
-      const uri = await publicClient.readContract({
-        address: CONTRACT_ADDRESS_NFT,
-        abi: ABI_NFT,
-        functionName: "tokenURI",
-        args: [item[2]], // item[2] itu merupakan tokenId
-      });
-
-      const metadataURL = resolveIPFS(uri);
-
-      // Fetch Metadata ???
-      const response = await fetch(metadataURL);
-      const metadata = await response.json();
-
-      // ambil totalPrice
-      const totalPrice = await publicClient.readContract({
-        address: CONTRACT_ADDRESS_MARKETPLACE,
-        abi: ABI_MARKETPLACE,
-        functionName: "getTotalPrice",
-        args: [i],
-      });
-
-      // push ke Array
-      itemData.push({
-        itemId: Number(item[0]),
-        price: item[3],
-        totalPrice,
-        seller: item[4],
-        name: metadata.name,
-        description: metadata.description,
-        image: resolveIPFS(metadata.image),
-      });
-    }
-
-    setItems(itemData);
-    setIsLoading(false);
-  };
-
-  const purchaseItem = (item) => {
-    try {
-      setProcessingItemId(item.itemId);
-
-      writeContract({
-        address: CONTRACT_ADDRESS_MARKETPLACE,
-        abi: ABI_MARKETPLACE,
-        functionName: "purchaseItem",
-        args: [item.itemId],
-        value: item.totalPrice,
-      });
-
-    } catch(err) {
-      console.log("Error in purchase item: ", err.message);
-      setProcessingItemId(null);
-    }
-  };
-
-  useEffect(() => {
-    loadMarketplaceItems();
-
-    if (isSuccess) {
-      alert("✅ Purchase NFT successfully!");
-    }
-
-    if (isError) {
-      alert("Purchase item failed!");
-      console.error("Purchase item failed!", isError);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, isError]);
-
-  // filter price
-  const sortedItems = [...items].sort((a,b) => {
-    if(sortOrder === "high") {
-      return a.totalPrice > b.totalPrice ? -1 : 1
-    }
-
-    if(sortOrder === "low") {
-      return a.totalPrice < b.totalPrice ? -1 : 1
-    }
-  })
-
-  if (isLoading) return <h1 className="animate-pulse text-white">Loading...</h1>;
+  if (loading) return <h1 className="animate-pulse text-white">Loading...</h1>;
 
   return (
     <>
@@ -160,9 +25,9 @@ export default function Marketplace() {
 
         {/* card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {sortedItems.map((itm, i) => {
+          {items.map((itm, i) => {
             const isOwner = address && itm.seller && address.toLowerCase() === itm.seller.toLowerCase();
-            const isThisItemProcessing = processingItemId === itm.itemId && (isPending || isConfirmingBtn);
+            const isThisItemProcessing = processingItemId === itm.itemId && isProcessing;
 
             return (
               <div
