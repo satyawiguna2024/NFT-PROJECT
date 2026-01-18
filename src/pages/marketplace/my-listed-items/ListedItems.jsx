@@ -1,28 +1,73 @@
 import { useMyListedItems } from "../../../hooks/useMyListedItems";
 import { formatEther } from "viem";
+import Skeleton from "../../../components/Skeleton"
 
 export default function ListedItems() {
-  const {items, loading, sortOrder, setSortOrder} = useMyListedItems();
-
-  if (loading) return <span className="animate-pulse text-white">Loading...</span>;
+  const { items, loading, sortOrder, setSortOrder } = useMyListedItems();
 
   return (
     <>
-      <div className="container-costume p-3 mt-5">
-        <div className="flex justify-between items-center">
-          <h1 className="font-poppins font-semibold text-lg sm:text-xl lg:text-2xl text-gray-200 tracking-wide">
-            {items.length} Items
-          </h1>
+      {loading ? (
+        <div className="container-costume p-3 mt-5">
+          <div className="flex justify-between items-center">
+            {/* items & filter input */}
+            <Skeleton className="w-20 h-6 rounded-full" />
+            <Skeleton className="w-20 h-6 rounded-full" />
+          </div>
 
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="border border-gray-200 text-gray-200 p-1 rounded-md">
-            <option value="high">High to Low</option>
-            <option value="low">Low to High</option>
-          </select>
+          {/* card */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto animate-pulse"
+              >
+                {/* header */}
+                <div className="flex items-center gap-x-2">
+                  <Skeleton className="size-13 rounded-full" />
+                  <div className="space-y-3">
+                    <Skeleton className="w-40 h-3 rounded-full" />
+                    <Skeleton className="w-30 h-3 rounded-full" />
+                  </div>
+                </div>
+
+                {/* image */}
+                <div className="mt-3">
+                  <Skeleton className="size-64 rounded-3xl" />
+                </div>
+
+                <div className="mt-3 mx-2">
+                  <Skeleton className="w-30 h-5 rounded-full" />
+
+                  <div className="mt-2 space-y-2">
+                    <Skeleton className="w-28 h-3 rounded-full" />
+                    <Skeleton className="w-25 h-3 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      ) : (
+        <div className="container-costume p-3 mt-5">
+          <div className="flex justify-between items-center">
+            <h1 className="font-poppins font-semibold text-lg sm:text-xl lg:text-2xl text-gray-200 tracking-wide">
+              {items.length} Items
+            </h1>
 
-        {/* card */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {items.map((itm, i) => (
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="border border-gray-200 text-gray-200 p-1 rounded-md"
+            >
+              <option value="high">High to Low</option>
+              <option value="low">Low to High</option>
+            </select>
+          </div>
+
+          {/* card */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
+            {items.map((itm, i) => (
               <div
                 key={i}
                 className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto"
@@ -52,7 +97,9 @@ export default function ListedItems() {
                     className="w-full h-64 bg-cover bg-center p-2 object-cover rounded-3xl"
                   />
 
-                  <h5 className={`absolute bottom-4 left-20 z-10 px-3 rounded-full font-poppins bg-black/60 backdrop-blur-md border ${itm.sold ? "text-red-400  border-red-400/40 shadow-[0_0_15px_rgba(239,68,68,0.6)]" : "text-green-400  border-green-400/40 shadow-[0_0_15px_rgba(34,197,94,0.6)]"} `}>
+                  <h5
+                    className={`absolute bottom-4 left-20 z-10 px-3 rounded-full font-poppins bg-black/60 backdrop-blur-md border ${itm.sold ? "text-red-400  border-red-400/40 shadow-[0_0_15px_rgba(239,68,68,0.6)]" : "text-green-400  border-green-400/40 shadow-[0_0_15px_rgba(34,197,94,0.6)]"} `}
+                  >
                     {itm.sold ? "Sold Out" : "Available"}
                   </h5>
                 </div>
@@ -73,9 +120,10 @@ export default function ListedItems() {
                   </div>
                 </div>
               </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

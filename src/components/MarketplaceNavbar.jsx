@@ -66,6 +66,7 @@ export default function MarketplaceNavbar() {
                 <NavLink
                   end
                   to={list.path}
+                  onClick={() => setNavIsOpen(false)}
                   className={({ isActive }) =>
                     `${
                       isActive

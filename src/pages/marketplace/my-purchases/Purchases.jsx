@@ -1,13 +1,51 @@
+import Skeleton from "../../../components/Skeleton";
 import { usePurchaseItem } from "../../../hooks/usePurchase";
 import { formatEther } from "viem";
 
 export default function Purchases() {
   const {items, loading, sortOrder, setSortOrder} = usePurchaseItem();
 
-  if (loading) return <span className="animate-pulse text-white">Loading...</span>;
-
   return (
     <>
+    {loading ? (
+      <div className="container-costume p-3 mt-5">
+        <div className="flex justify-between items-center">
+          {/* items & filter input */}
+          <Skeleton className="w-20 h-6 rounded-full" />
+          <Skeleton className="w-20 h-6 rounded-full" />
+        </div>
+
+        {/* card */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
+          {[1,2,3,4].map((_, index) => (
+            <div key={index} className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto animate-pulse">
+              {/* header */}
+              <div className="flex items-center gap-x-2">
+                <Skeleton className="size-13 rounded-full" />
+                <div className="space-y-3">
+                  <Skeleton className="w-40 h-3 rounded-full" />
+                  <Skeleton className="w-30 h-3 rounded-full" />
+                </div>
+              </div>
+
+              {/* image */}
+              <div className="mt-3">
+                <Skeleton className="size-64 rounded-3xl" />
+              </div>
+
+              <div className="mt-3 mx-2">
+                <Skeleton className="w-30 h-5 rounded-full"/>
+
+                <div className="mt-2 space-y-2">
+                  <Skeleton className="w-28 h-3 rounded-full"/>
+                  <Skeleton className="w-25 h-3 rounded-full"/>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
       <div className="container-costume p-3 mt-5">
         <div className="flex justify-between items-center">
           <h1 className="font-poppins font-semibold text-lg sm:text-xl lg:text-2xl text-gray-200 tracking-wide">
@@ -28,6 +66,7 @@ export default function Purchases() {
                 className="bg-gray-600 p-3 rounded-xl max-w-70 mx-auto"
               >
                 <div className="flex items-center gap-x-2">
+                  {/* avatar */}
                   <div
                     style={{
                       backgroundImage: `url('https://api.dicebear.com/7.x/identicon/svg?seed=${itm.seller}')`,
@@ -72,6 +111,7 @@ export default function Purchases() {
           ))}
         </div>
       </div>
+    )}
     </>
   );
 }
