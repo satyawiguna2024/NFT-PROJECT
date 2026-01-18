@@ -59,7 +59,16 @@ export default function Marketplace() {
             ))}
           </div>
         </div>
-      ) : (
+      ) : items.length === 0 ? (
+        <div className="container-costume p-3 mt-20 flex flex-col items-center text-center">
+          <p className="text-gray-400 font-poppins text-lg">
+            There are no items here.
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Crafted items will appear here.
+          </p>
+        </div>
+      ):(
         <div className="container-costume p-3 mt-5">
           <div className="flex justify-between items-center">
             <h1 className="font-poppins font-semibold text-lg sm:text-xl lg:text-2xl text-gray-200 tracking-wide">

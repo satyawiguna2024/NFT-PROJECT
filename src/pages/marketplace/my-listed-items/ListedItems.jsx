@@ -1,6 +1,6 @@
 import { useMyListedItems } from "../../../hooks/useMyListedItems";
 import { formatEther } from "viem";
-import Skeleton from "../../../components/Skeleton"
+import Skeleton from "../../../components/Skeleton";
 
 export default function ListedItems() {
   const { items, loading, sortOrder, setSortOrder } = useMyListedItems();
@@ -47,6 +47,15 @@ export default function ListedItems() {
               </div>
             ))}
           </div>
+        </div>
+      ) : items.length === 0 ? (
+        <div className="container-costume p-3 mt-20 flex flex-col items-center text-center">
+          <p className="text-gray-400 font-poppins text-lg">
+            You don't have any items yet
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Crafted items will appear here.
+          </p>
         </div>
       ) : (
         <div className="container-costume p-3 mt-5">
